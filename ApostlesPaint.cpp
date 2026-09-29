@@ -5,8 +5,9 @@
 #include "framework.h"
 #include "ApostlesPaint.h"
 
-#include "set_text.h"
-#include "set_num.h"
+#include "shape_editor.h"
+
+ShapeObjectsEditor SOEditor;
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
@@ -127,26 +128,41 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+    case WM_LBUTTONDOWN:
+        SOEditor.OnLBdown(hWnd);
+        break;
+    case WM_LBUTTONUP:
+        SOEditor.OnLBup(hWnd);
+        break;
+    case WM_MOUSEMOVE:
+        SOEditor.OnMouseMove(hWnd);
+        break;
+    case WM_PAINT:
+        SOEditor.OnPaint(hWnd);
+        break;
+    case WM_INITMENUPOPUP:
+        SOEditor.OnInitMenuPopup(hWnd, wParam);
+        break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
             // Parse the menu selections:
             switch (wmId)
             {
+            case IDM_POINT:
+                SOEditor.StartPointEditor();
+                break;
+            case IDM_LINE:
+                SOEditor.StartLineEditor();
+                break;
+            case IDM_RECT:
+                SOEditor.StartRectEditor();
+                break;
+            case IDM_ELLIPSE:
+                SOEditor.StartEllipseEditor();
+                break;
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case ID_ACTIONS_SETTEXT:
-                if (FUNC_SET_TEXT(hInst, hWnd) == IDOK)
-                {
-                    InvalidateRect(hWnd, NULL, TRUE);
-                }
-                break;
-            case ID_ACTIONS_SETNUMBER:
-                if (FUNC_SET_NUM(hInst, hWnd) == IDOK) 
-                {
-                    InvalidateRect(hWnd, NULL, TRUE);
-                }
                 break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
@@ -154,22 +170,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
-        }
-        break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-
-            if (szText[0] != L'\0')
-            {
-                TextOutW(hdc, 20, 20, szText, (int)wcslen(szText));
-            }
-
-            _itow_s(pos, szNumber, MAX_LOADSTRING, 10);
-            TextOutW(hdc, 20, 40, szNumber, (int)wcslen(szNumber));
-
-            EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
