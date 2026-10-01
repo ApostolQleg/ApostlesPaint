@@ -6,7 +6,7 @@
 extern Shape* pcshape[];
 extern int shapesCount;
 
-void ShapeEditor::OnLBdown(HWND hWnd)
+void Editor::OnLBdown(HWND hWnd)
 {
     isDrawing = true;
 
@@ -18,10 +18,25 @@ void ShapeEditor::OnLBdown(HWND hWnd)
     ystart = yend = pt.y;
 }
 
-void ShapeEditor::OnLBup(HWND hWnd) {}
-void ShapeEditor::OnMouseMove(HWND hWnd) {}
-void ShapeEditor::OnPaint(HWND hWnd) {}
-void ShapeEditor::OnInitMenuPopup(HWND hWnd, WPARAM wParam) {}
+void Editor::OnLBup(HWND hWnd) {}
+void Editor::OnMouseMove(HWND hWnd) {}
+void Editor::OnPaint(HWND hWnd) {}
+
+void Editor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
+{
+    HMENU hMenu = GetMenu(hWnd);
+    HMENU hSubMenu = GetSubMenu(hMenu, 1);
+
+    if ((HMENU)wParam == hSubMenu)
+    {
+        UINT currentId = GetMenuItemId();
+        UINT ids[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE };
+        for (UINT id : ids)
+        {
+            CheckMenuItem(hSubMenu, id, (id == currentId) ? MF_CHECKED : MF_UNCHECKED);
+        }
+    }
+}
 
 void PointEditor::OnLBup(HWND hWnd) {
     if (!isDrawing) return;
@@ -43,20 +58,6 @@ void PointEditor::OnLBup(HWND hWnd) {
     }
 
     InvalidateRect(hWnd, NULL, TRUE);
-}
-
-void PointEditor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
-{
-    HMENU hMenu = GetMenu(hWnd);
-    HMENU hSubMenu = GetSubMenu(hMenu, 1);
-
-    if ((HMENU)wParam == hSubMenu)
-    {
-        CheckMenuItem(hSubMenu, IDM_POINT, MF_CHECKED);
-        CheckMenuItem(hSubMenu, IDM_LINE, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_RECT, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_ELLIPSE, MF_UNCHECKED);
-    }
 }
 
 void LineEditor::OnMouseMove(HWND hWnd)
@@ -110,20 +111,6 @@ void LineEditor::OnLBup(HWND hWnd)
     InvalidateRect(hWnd, NULL, TRUE);
 }
 
-void LineEditor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
-{
-    HMENU hMenu = GetMenu(hWnd);
-    HMENU hSubMenu = GetSubMenu(hMenu, 1);
-
-    if ((HMENU)wParam == hSubMenu)
-    {
-        CheckMenuItem(hSubMenu, IDM_POINT, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_LINE, MF_CHECKED);
-        CheckMenuItem(hSubMenu, IDM_RECT, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_ELLIPSE, MF_UNCHECKED);
-    }
-}
-
 void RectEditor::OnMouseMove(HWND hWnd)
 {
     if (!isDrawing) return;
@@ -175,20 +162,6 @@ void RectEditor::OnLBup(HWND hWnd)
     InvalidateRect(hWnd, NULL, TRUE);
 }
 
-void RectEditor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
-{
-    HMENU hMenu = GetMenu(hWnd);
-    HMENU hSubMenu = GetSubMenu(hMenu, 1);
-
-    if ((HMENU)wParam == hSubMenu)
-    {
-        CheckMenuItem(hSubMenu, IDM_POINT, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_LINE, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_RECT, MF_CHECKED);
-        CheckMenuItem(hSubMenu, IDM_ELLIPSE, MF_UNCHECKED);
-    }
-}
-
 void EllipseEditor::OnMouseMove(HWND hWnd)
 {
     if (!isDrawing) return;
@@ -237,18 +210,4 @@ void EllipseEditor::OnLBup(HWND hWnd)
     }
 
     InvalidateRect(hWnd, NULL, TRUE);
-}
-
-void EllipseEditor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
-{
-    HMENU hMenu = GetMenu(hWnd);
-    HMENU hSubMenu = GetSubMenu(hMenu, 1);
-
-    if ((HMENU)wParam == hSubMenu)
-    {
-        CheckMenuItem(hSubMenu, IDM_POINT, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_LINE, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_RECT, MF_UNCHECKED);
-        CheckMenuItem(hSubMenu, IDM_ELLIPSE, MF_CHECKED);
-    }
 }

@@ -2,6 +2,8 @@
 #include "framework.h"
 #include "shape.h"
 
+#define POINT_RADIUS 5
+
 void Shape::Set(long x1, long y1, long x2, long y2)
 {
 	xstart = x1; ystart = y1;
@@ -9,7 +11,11 @@ void Shape::Set(long x1, long y1, long x2, long y2)
 }
 
 void PointShape::Show(HDC hdc) {
-	SetPixel(hdc, xstart, ystart, RGB(0, 0, 0));
+    for (int x = -POINT_RADIUS; x <= POINT_RADIUS; x++) {
+        for (int y = -POINT_RADIUS; y <= POINT_RADIUS; y++) {
+            SetPixel(hdc, xstart+x, ystart+y, RGB(0, 0, 0));
+        }
+    }
 }
 
 void LineShape::Show(HDC hdc) {

@@ -2,61 +2,58 @@
 
 #include "Resource.h"
 
-class Editor {
-public:
-	virtual ~Editor() {};
-
-	virtual void OnLBdown(HWND) = 0;
-	virtual void OnLBup(HWND) = 0;
-	virtual void OnMouseMove(HWND) = 0;
-	virtual void OnPaint(HWND) = 0;
-};
-
-class ShapeEditor : public Editor
+class Editor
 {
 protected:
-	bool isDrawing = false;
-	long xstart = 0, ystart = 0;
-	long xend = 0, yend = 0;
+    bool isDrawing = false;
+    long xstart = 0, ystart = 0;
+    long xend = 0, yend = 0;
+
+    virtual UINT GetMenuItemId() const = 0;
+
 public:
-	ShapeEditor() {}
-	virtual ~ShapeEditor() {}
+    Editor() {}
+    virtual ~Editor() {}
 
-	void OnLBdown(HWND hWnd) override;
-	void OnLBup(HWND hWnd) override;
-	void OnMouseMove(HWND hWnd) override;
-	void OnPaint(HWND hWnd) override;
+    virtual void OnLBdown(HWND hWnd);
+    virtual void OnLBup(HWND hWnd);
+    virtual void OnMouseMove(HWND hWnd);
+    virtual void OnPaint(HWND hWnd);
 
-	virtual void OnInitMenuPopup(HWND hWnd, WPARAM wParam);
+    void OnInitMenuPopup(HWND hWnd, WPARAM wParam);
 };
 
-class PointEditor : public ShapeEditor
+class PointEditor : public Editor
 {
+protected:
+    UINT GetMenuItemId() const override { return IDM_POINT; }
 public:
-	void OnLBup(HWND hWnd) override;
-	void OnInitMenuPopup(HWND hWnd, WPARAM wParam) override;
+    void OnLBup(HWND hWnd) override;
 };
 
-class LineEditor : public ShapeEditor
+class LineEditor : public Editor
 {
+protected:
+    UINT GetMenuItemId() const override { return IDM_LINE; }
 public:
-	void OnMouseMove(HWND hWnd) override;
-	void OnLBup(HWND hWnd) override;
-	void OnInitMenuPopup(HWND hWnd, WPARAM wParam) override;
+    void OnMouseMove(HWND hWnd) override;
+    void OnLBup(HWND hWnd) override;
 };
 
-class RectEditor : public ShapeEditor
+class RectEditor : public Editor
 {
+protected:
+    UINT GetMenuItemId() const override { return IDM_RECT; }
 public:
-	void OnMouseMove(HWND hWnd) override;
-	void OnLBup(HWND hWnd) override;
-	void OnInitMenuPopup(HWND hWnd, WPARAM wParam) override;
+    void OnMouseMove(HWND hWnd) override;
+    void OnLBup(HWND hWnd) override;
 };
 
-class EllipseEditor : public ShapeEditor
+class EllipseEditor : public Editor
 {
+protected:
+    UINT GetMenuItemId() const override { return IDM_ELLIPSE; }
 public:
-	void OnMouseMove(HWND hWnd) override;
-	void OnLBup(HWND hWnd) override;
-	void OnInitMenuPopup(HWND hWnd, WPARAM wParam) override;
+    void OnMouseMove(HWND hWnd) override;
+    void OnLBup(HWND hWnd) override;
 };

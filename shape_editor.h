@@ -2,24 +2,24 @@
 
 #include "Resource.h"
 
-class ShapeEditor;
+class Editor;
 
 class ShapeObjectsEditor
 {
 private:
-	ShapeEditor* pse = nullptr;
+    Editor* pse = nullptr;
 public:
-	ShapeObjectsEditor();
+    ShapeObjectsEditor();
     ~ShapeObjectsEditor();
 
-	void StartPointEditor();
-	void StartLineEditor();
-	void StartRectEditor();
-	void StartEllipseEditor();
+    void StartPointEditor();
+    void StartLineEditor();
+    void StartRectEditor();
+    void StartEllipseEditor();
 
-	void OnLBdown(HWND);
-	void OnLBup(HWND);
-	void OnMouseMove(HWND);
-	void OnPaint(HWND);
-	void OnInitMenuPopup(HWND, WPARAM);
+    void OnLBdown(HWND);
+    void OnLBup(HWND);
+    void OnMouseMove(HWND);
+    void OnPaint(HWND);
+    void OnInitMenuPopup(HWND, WPARAM);
 };
