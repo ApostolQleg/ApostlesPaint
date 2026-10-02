@@ -18,7 +18,6 @@ public:
     virtual void OnLBdown(HWND hWnd);
     virtual void OnLBup(HWND hWnd);
     virtual void OnMouseMove(HWND hWnd);
-    virtual void OnPaint(HWND hWnd);
 
     void OnInitMenuPopup(HWND hWnd, WPARAM wParam);
 };
@@ -28,6 +27,7 @@ class PointEditor : public Editor
 protected:
     UINT GetMenuItemId() const override { return IDM_POINT; }
 public:
+    void OnMouseMove(HWND hWnd) override;
     void OnLBup(HWND hWnd) override;
 };
 

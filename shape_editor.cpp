@@ -4,7 +4,7 @@
 #include "editor.h"
 #include "shape.h"
 
-Shape* pcshape[MAX_LOADSTRING] = { nullptr };
+Shape* pcshape[MAX_OBJECTS_COUNT] = { nullptr };
 int shapesCount = 0;
 
 ShapeObjectsEditor::ShapeObjectsEditor()

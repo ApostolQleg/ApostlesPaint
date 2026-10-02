@@ -20,7 +20,6 @@ void Editor::OnLBdown(HWND hWnd)
 
 void Editor::OnLBup(HWND hWnd) {}
 void Editor::OnMouseMove(HWND hWnd) {}
-void Editor::OnPaint(HWND hWnd) {}
 
 void Editor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
 {
@@ -38,6 +37,11 @@ void Editor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
     }
 }
 
+void PointEditor::OnMouseMove(HWND hWnd)
+{
+    OnLBup(hWnd);
+}
+
 void PointEditor::OnLBup(HWND hWnd) {
     if (!isDrawing) return;
     isDrawing = false;
@@ -48,7 +52,7 @@ void PointEditor::OnLBup(HWND hWnd) {
     xend = pt.x;
     yend = pt.y;
 
-    if (shapesCount < MAX_LOADSTRING)
+    if (shapesCount < MAX_OBJECTS_COUNT)
     {
         PointShape* pPoint = new PointShape();
         pPoint->Set(xstart, ystart, xend, yend);
@@ -57,19 +61,15 @@ void PointEditor::OnLBup(HWND hWnd) {
         shapesCount++;
     }
 
-    InvalidateRect(hWnd, NULL, TRUE);
+    InvalidateRect(hWnd, NULL, FALSE);
 }
 
 void LineEditor::OnMouseMove(HWND hWnd)
 {
     if (!isDrawing) return;
 
-    HPEN hPen, hOldPen;
     HDC hdc = GetDC(hWnd);
-
     SetROP2(hdc, R2_NOTXORPEN);
-    hPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
-    hOldPen = (HPEN)SelectObject(hdc, hPen);
 
     MoveToEx(hdc, xstart, ystart, NULL);
     LineTo(hdc, xend, yend);
@@ -83,8 +83,6 @@ void LineEditor::OnMouseMove(HWND hWnd)
     MoveToEx(hdc, xstart, ystart, NULL);
     LineTo(hdc, xend, yend);
 
-    SelectObject(hdc, hOldPen);
-    DeleteObject(hPen);
     ReleaseDC(hWnd, hdc);
 }
 
@@ -99,7 +97,7 @@ void LineEditor::OnLBup(HWND hWnd)
     xend = pt.x;
     yend = pt.y;
 
-    if (shapesCount < MAX_LOADSTRING)
+    if (shapesCount < MAX_OBJECTS_COUNT)
     {
         LineShape* pLine = new LineShape();
         pLine->Set(xstart, ystart, xend, yend);
@@ -108,7 +106,7 @@ void LineEditor::OnLBup(HWND hWnd)
         shapesCount++;
     }
 
-    InvalidateRect(hWnd, NULL, TRUE);
+    InvalidateRect(hWnd, NULL, FALSE);
 }
 
 void RectEditor::OnMouseMove(HWND hWnd)
@@ -117,9 +115,6 @@ void RectEditor::OnMouseMove(HWND hWnd)
 
     HDC hdc = GetDC(hWnd);
     SetROP2(hdc, R2_NOTXORPEN);
-
-    HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
-    HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
 
     HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
 
@@ -134,8 +129,6 @@ void RectEditor::OnMouseMove(HWND hWnd)
     Rectangle(hdc, xstart, ystart, xend, yend);
 
     SelectObject(hdc, hOldBrush);
-    SelectObject(hdc, hOldPen);
-    DeleteObject(hPen);
     ReleaseDC(hWnd, hdc);
 }
 
@@ -150,7 +143,7 @@ void RectEditor::OnLBup(HWND hWnd)
     xend = pt.x;
     yend = pt.y;
 
-    if (shapesCount < MAX_LOADSTRING)
+    if (shapesCount < MAX_OBJECTS_COUNT)
     {
         RectShape* pRect = new RectShape();
         pRect->Set(xstart, ystart, xend, yend);
@@ -159,7 +152,7 @@ void RectEditor::OnLBup(HWND hWnd)
         shapesCount++;
     }
 
-    InvalidateRect(hWnd, NULL, TRUE);
+    InvalidateRect(hWnd, NULL, FALSE);
 }
 
 void EllipseEditor::OnMouseMove(HWND hWnd)
@@ -169,11 +162,12 @@ void EllipseEditor::OnMouseMove(HWND hWnd)
     HDC hdc = GetDC(hWnd);
     SetROP2(hdc, R2_NOTXORPEN);
 
-    HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
-    HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
     HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
 
-    Ellipse(hdc, xstart, ystart, xend, yend);
+    long xcentre = (2 * xstart) - xend;
+    long ycentre = (2 * ystart) - yend;
+
+    Ellipse(hdc, xcentre, ycentre, xend, yend);
 
     POINT pt;
     GetCursorPos(&pt);
@@ -181,11 +175,12 @@ void EllipseEditor::OnMouseMove(HWND hWnd)
     xend = pt.x;
     yend = pt.y;
 
-    Ellipse(hdc, xstart, ystart, xend, yend);
+    xcentre = (2 * xstart) - xend;
+    ycentre = (2 * ystart) - yend;
+
+    Ellipse(hdc, xcentre, ycentre, xend, yend);
 
     SelectObject(hdc, hOldBrush);
-    SelectObject(hdc, hOldPen);
-    DeleteObject(hPen);
     ReleaseDC(hWnd, hdc);
 }
 
@@ -200,7 +195,7 @@ void EllipseEditor::OnLBup(HWND hWnd)
     xend = pt.x;
     yend = pt.y;
 
-    if (shapesCount < MAX_LOADSTRING)
+    if (shapesCount < MAX_OBJECTS_COUNT)
     {
         EllipseShape* pEllipse = new EllipseShape();
         pEllipse->Set(xstart, ystart, xend, yend);
@@ -209,5 +204,5 @@ void EllipseEditor::OnLBup(HWND hWnd)
         shapesCount++;
     }
 
-    InvalidateRect(hWnd, NULL, TRUE);
+    InvalidateRect(hWnd, NULL, FALSE);
 }

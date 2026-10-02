@@ -2,7 +2,7 @@
 #include "framework.h"
 #include "shape.h"
 
-#define POINT_RADIUS 5
+const int POINT_RADIUS = 5;
 
 void Shape::Set(long x1, long y1, long x2, long y2)
 {
@@ -11,11 +11,13 @@ void Shape::Set(long x1, long y1, long x2, long y2)
 }
 
 void PointShape::Show(HDC hdc) {
-    for (int x = -POINT_RADIUS; x <= POINT_RADIUS; x++) {
-        for (int y = -POINT_RADIUS; y <= POINT_RADIUS; y++) {
-            SetPixel(hdc, xstart+x, ystart+y, RGB(0, 0, 0));
-        }
-    }
+    long x1 = xstart - POINT_RADIUS;
+    long y1 = ystart - POINT_RADIUS;
+    long x2 = xstart + POINT_RADIUS;
+    long y2 = ystart + POINT_RADIUS;
+    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+    Rectangle(hdc, x1, y1, x2, y2);
+    SelectObject(hdc, hOldBrush);
 }
 
 void LineShape::Show(HDC hdc) {
@@ -30,7 +32,11 @@ void RectShape::Show(HDC hdc) {
 }
 
 void EllipseShape::Show(HDC hdc) {
-    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
-    Ellipse(hdc, xstart, ystart, xend, yend);
+    long xcentre = (2 * xstart) - xend;
+    long ycentre = (2 * ystart) - yend;
+    HBRUSH hBrush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 255));
+    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+    Ellipse(hdc, xcentre, ycentre, xend, yend);
     SelectObject(hdc, hOldBrush);
+    DeleteObject(hBrush);
 }

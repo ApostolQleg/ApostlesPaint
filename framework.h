@@ -11,3 +11,4 @@
 #include <tchar.h>
 
 #define MAX_LOADSTRING 100
+#define MAX_OBJECTS_COUNT 10000
