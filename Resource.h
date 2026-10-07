@@ -12,6 +12,8 @@
 #define IDI_SMALL                       108
 #define IDC_APOSTLESPAINT               109
 #define IDR_MAINFRAME                   128
+#define IDB_TOOLB                       131
+#define IDB_TOOLBAR                     131
 #define ID_ACTIONS_SETTEXT              32771
 #define ID_ACTIONS_SETNUMBER            32772
 #define ID_OBJECTS_POINT                32773
@@ -30,7 +32,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        131
+#define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32782
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           110

@@ -10,5 +10,8 @@
 #include <memory.h>
 #include <tchar.h>
 
+#include <commctrl.h>
+#pragma comment(lib, "comctl32.lib")
+
 #define MAX_LOADSTRING 100
 #define MAX_OBJECTS_COUNT 10000

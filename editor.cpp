@@ -118,7 +118,12 @@ void RectEditor::OnMouseMove(HWND hWnd)
 
     HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
 
-    Rectangle(hdc, xstart, ystart, xend, yend);
+
+    long xcentre = (2 * xstart) - xend;
+    long ycentre = (2 * ystart) - yend;
+
+
+    Rectangle(hdc, xcentre, ycentre, xend, yend);
 
     POINT pt;
     GetCursorPos(&pt);
@@ -126,7 +131,12 @@ void RectEditor::OnMouseMove(HWND hWnd)
     xend = pt.x;
     yend = pt.y;
 
-    Rectangle(hdc, xstart, ystart, xend, yend);
+
+    xcentre = (2 * xstart) - xend;
+    ycentre = (2 * ystart) - yend;
+
+
+    Rectangle(hdc, xcentre, ycentre, xend, yend);
 
     SelectObject(hdc, hOldBrush);
     ReleaseDC(hWnd, hdc);
@@ -164,10 +174,7 @@ void EllipseEditor::OnMouseMove(HWND hWnd)
 
     HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
 
-    long xcentre = (2 * xstart) - xend;
-    long ycentre = (2 * ystart) - yend;
-
-    Ellipse(hdc, xcentre, ycentre, xend, yend);
+    Ellipse(hdc, xstart, ystart, xend, yend);
 
     POINT pt;
     GetCursorPos(&pt);
@@ -175,10 +182,7 @@ void EllipseEditor::OnMouseMove(HWND hWnd)
     xend = pt.x;
     yend = pt.y;
 
-    xcentre = (2 * xstart) - xend;
-    ycentre = (2 * ystart) - yend;
-
-    Ellipse(hdc, xcentre, ycentre, xend, yend);
+    Ellipse(hdc, xstart, ystart, xend, yend);
 
     SelectObject(hdc, hOldBrush);
     ReleaseDC(hWnd, hdc);

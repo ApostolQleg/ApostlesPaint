@@ -26,17 +26,17 @@ void LineShape::Show(HDC hdc) {
 }
 
 void RectShape::Show(HDC hdc) {
-    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
-    Rectangle(hdc, xstart, ystart, xend, yend);
+    long xcentre = (2 * xstart) - xend;
+    long ycentre = (2 * ystart) - yend;
+    HBRUSH hBrush = (HBRUSH)CreateSolidBrush(RGB(255, 255, 255));
+    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+    Rectangle(hdc, xcentre, ycentre, xend, yend);
     SelectObject(hdc, hOldBrush);
+    DeleteObject(hBrush);
 }
 
 void EllipseShape::Show(HDC hdc) {
-    long xcentre = (2 * xstart) - xend;
-    long ycentre = (2 * ystart) - yend;
-    HBRUSH hBrush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 255));
-    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-    Ellipse(hdc, xcentre, ycentre, xend, yend);
+    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    Ellipse(hdc, xstart, ystart, xend, yend);
     SelectObject(hdc, hOldBrush);
-    DeleteObject(hBrush);
 }

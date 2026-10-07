@@ -8,10 +8,16 @@ class ShapeEditor
 {
 private:
     Editor *pse = nullptr;
+    HWND hWndToolbar = nullptr;
 
 public:
     ShapeEditor();
     ~ShapeEditor();
+
+    void OnCreate(HWND hWnd);
+    void OnSize(HWND hWnd);
+    void OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam);
+    void SetToolState(UINT activeId);
 
     void StartPointEditor();
     void StartLineEditor();

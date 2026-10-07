@@ -29,6 +29,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: Place code here.
+    InitCommonControls();
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -126,6 +127,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+    case WM_CREATE:
+        SEditor.OnCreate(hWnd);
+        break;
+    case WM_SIZE:
+        SEditor.OnSize(hWnd);
+        break;
+    case WM_NOTIFY:
+        SEditor.OnNotify(hWnd, wParam, lParam);
+        break;
     case WM_LBUTTONDOWN:
         SEditor.OnLBdown(hWnd);
         break;
