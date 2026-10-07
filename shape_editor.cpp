@@ -4,15 +4,15 @@
 #include "editor.h"
 #include "shape.h"
 
-Shape* pcshape[MAX_OBJECTS_COUNT] = { nullptr };
+Shape *pcshape[MAX_OBJECTS_COUNT] = {nullptr};
 int shapesCount = 0;
 
-ShapeObjectsEditor::ShapeObjectsEditor()
+ShapeEditor::ShapeEditor()
 {
     pse = nullptr;
 }
 
-ShapeObjectsEditor::~ShapeObjectsEditor()
+ShapeEditor::~ShapeEditor()
 {
     if (pse)
     {
@@ -31,51 +31,59 @@ ShapeObjectsEditor::~ShapeObjectsEditor()
     shapesCount = 0;
 }
 
-void ShapeObjectsEditor::StartPointEditor()
+void ShapeEditor::StartPointEditor()
 {
-    if (pse) delete pse;
+    if (pse)
+        delete pse;
     pse = new PointEditor();
 }
 
-void ShapeObjectsEditor::StartLineEditor()
+void ShapeEditor::StartLineEditor()
 {
-    if (pse) delete pse;
+    if (pse)
+        delete pse;
     pse = new LineEditor();
 }
 
-void ShapeObjectsEditor::StartRectEditor()
+void ShapeEditor::StartRectEditor()
 {
-    if (pse) delete pse;
+    if (pse)
+        delete pse;
     pse = new RectEditor();
 }
 
-void ShapeObjectsEditor::StartEllipseEditor()
+void ShapeEditor::StartEllipseEditor()
 {
-    if (pse) delete pse;
+    if (pse)
+        delete pse;
     pse = new EllipseEditor();
 }
 
-void ShapeObjectsEditor::OnLBdown(HWND hWnd)
+void ShapeEditor::OnLBdown(HWND hWnd)
 {
-    if (pse) pse->OnLBdown(hWnd);
+    if (pse)
+        pse->OnLBdown(hWnd);
 }
 
-void ShapeObjectsEditor::OnLBup(HWND hWnd)
+void ShapeEditor::OnLBup(HWND hWnd)
 {
-    if (pse) pse->OnLBup(hWnd);
+    if (pse)
+        pse->OnLBup(hWnd);
 }
 
-void ShapeObjectsEditor::OnMouseMove(HWND hWnd)
+void ShapeEditor::OnMouseMove(HWND hWnd)
 {
-    if (pse) pse->OnMouseMove(hWnd);
+    if (pse)
+        pse->OnMouseMove(hWnd);
 }
 
-void ShapeObjectsEditor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
+void ShapeEditor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
 {
-    if (pse) pse->OnInitMenuPopup(hWnd, wParam);
+    if (pse)
+        pse->OnInitMenuPopup(hWnd, wParam);
 }
 
-void ShapeObjectsEditor::OnPaint(HWND hWnd)
+void ShapeEditor::OnPaint(HWND hWnd)
 {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);

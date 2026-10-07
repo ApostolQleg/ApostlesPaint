@@ -4,13 +4,14 @@
 
 class Editor;
 
-class ShapeObjectsEditor
+class ShapeEditor
 {
 private:
-    Editor* pse = nullptr;
+    Editor *pse = nullptr;
+
 public:
-    ShapeObjectsEditor();
-    ~ShapeObjectsEditor();
+    ShapeEditor();
+    ~ShapeEditor();
 
     void StartPointEditor();
     void StartLineEditor();
