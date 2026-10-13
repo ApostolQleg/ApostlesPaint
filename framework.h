@@ -14,4 +14,9 @@
 #pragma comment(lib, "comctl32.lib")
 
 #define MAX_LOADSTRING 100
-#define MAX_OBJECTS_COUNT 10000
+#define INIT_SHAPES_COUNT 16
+
+#define RUBBER_THICKNESS 2
+#define SHAPE_THICKNESS 5
+
+#define IDC_SHAPE_TOOLBAR 10001

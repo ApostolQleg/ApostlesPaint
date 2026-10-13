@@ -2,41 +2,64 @@
 #include "framework.h"
 #include "shape.h"
 
-const int POINT_RADIUS = 5;
-
 void Shape::Set(long x1, long y1, long x2, long y2)
 {
 	xstart = x1; ystart = y1;
 	xend = x2; yend = y2;
 }
 
-void PointShape::Show(HDC hdc) {
-    long x1 = xstart - POINT_RADIUS;
-    long y1 = ystart - POINT_RADIUS;
-    long x2 = xstart + POINT_RADIUS;
-    long y2 = ystart + POINT_RADIUS;
-    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
-    Rectangle(hdc, x1, y1, x2, y2);
-    SelectObject(hdc, hOldBrush);
+HPEN Shape::CreateShapePen() const
+{
+	if (rubber)
+		return CreatePen(PS_DOT, RUBBER_THICKNESS, RGB(0, 0, 0));
+	return CreatePen(PS_SOLID, SHAPE_THICKNESS, RGB(0, 0, 0));
 }
 
-void LineShape::Show(HDC hdc) {
+void Point::Show(HDC hdc) {
+	long radius = SHAPE_THICKNESS / 2;
+	long x1 = xstart - radius;
+	long y1 = ystart - radius;
+	long x2 = xstart + radius + 1;
+	long y2 = ystart + radius + 1;
+
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+
+	Rectangle(hdc, x1, y1, x2, y2);
+
+	SelectObject(hdc, hOldBrush);
+}
+
+void Line::Show(HDC hdc) {
+	HPEN hPen = CreateShapePen();
+	HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
+
 	MoveToEx(hdc, xstart, ystart, NULL);
 	LineTo(hdc, xend, yend);
+
+	SelectObject(hdc, hOldPen);
+	DeleteObject(hPen);
 }
 
-void RectShape::Show(HDC hdc) {
-    long xcentre = (2 * xstart) - xend;
-    long ycentre = (2 * ystart) - yend;
-    HBRUSH hBrush = (HBRUSH)CreateSolidBrush(RGB(255, 255, 255));
-    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-    Rectangle(hdc, xcentre, ycentre, xend, yend);
-    SelectObject(hdc, hOldBrush);
-    DeleteObject(hBrush);
+void Rect::Show(HDC hdc) {
+	HPEN hPen = CreateShapePen();
+	HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
+
+	Rectangle(hdc, xstart, ystart, xend, yend);
+
+	SelectObject(hdc, hOldPen);
+	SelectObject(hdc, hOldBrush);
+	DeleteObject(hPen);
 }
 
-void EllipseShape::Show(HDC hdc) {
-    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
-    Ellipse(hdc, xstart, ystart, xend, yend);
-    SelectObject(hdc, hOldBrush);
+void Elips::Show(HDC hdc) {
+	HPEN hPen = CreateShapePen();
+	HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
+
+	Ellipse(hdc, xstart, ystart, xend, yend);
+
+	SelectObject(hdc, hOldPen);
+	SelectObject(hdc, hOldBrush);
+	DeleteObject(hPen);
 }

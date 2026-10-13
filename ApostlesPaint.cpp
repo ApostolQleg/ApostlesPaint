@@ -5,9 +5,9 @@
 #include "framework.h"
 #include "ApostlesPaint.h"
 
-#include "shape_editor.h"
+#include "editor.h"
 
-ShapeEditor SEditor;
+Editor editor;
 
 // Global Variables:
 HINSTANCE hInst;                     // current instance
@@ -128,28 +128,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
-        SEditor.OnCreate(hWnd);
+        editor.OnCreate(hWnd);
         break;
     case WM_SIZE:
-        SEditor.OnSize(hWnd);
+        editor.OnSize(hWnd);
         break;
     case WM_NOTIFY:
-        SEditor.OnNotify(hWnd, wParam, lParam);
+        editor.OnNotify(hWnd, wParam, lParam);
         break;
     case WM_LBUTTONDOWN:
-        SEditor.OnLBdown(hWnd);
+        editor.OnLBdown(hWnd);
         break;
     case WM_LBUTTONUP:
-        SEditor.OnLBup(hWnd);
+        editor.OnLBup(hWnd);
         break;
     case WM_MOUSEMOVE:
-        SEditor.OnMouseMove(hWnd);
+        editor.OnMouseMove(hWnd);
         break;
     case WM_PAINT:
-        SEditor.OnPaint(hWnd);
+        editor.OnPaint(hWnd);
         break;
     case WM_INITMENUPOPUP:
-        SEditor.OnInitMenuPopup(hWnd, wParam);
+        editor.OnInitMenuPopup(hWnd, wParam);
         break;
     case WM_COMMAND:
     {
@@ -158,16 +158,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         switch (wmId)
         {
         case IDM_POINT:
-            SEditor.StartPointEditor();
+            editor.Start(new Point, IDM_POINT);
             break;
         case IDM_LINE:
-            SEditor.StartLineEditor();
+            editor.Start(new Line, IDM_LINE);
             break;
         case IDM_RECT:
-            SEditor.StartRectEditor();
+            editor.Start(new Rect, IDM_RECT);
             break;
         case IDM_ELLIPSE:
-            SEditor.StartEllipseEditor();
+            editor.Start(new Elips, IDM_ELLIPSE);
             break;
         case IDM_ABOUT:
             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);

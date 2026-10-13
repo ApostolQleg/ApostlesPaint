@@ -30,13 +30,10 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shape_editor.h">
+    <ClInclude Include="editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="shape.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,13 +44,10 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="shape_editor.cpp">
+    <ClCompile Include="editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="shape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
