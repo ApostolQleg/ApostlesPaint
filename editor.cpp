@@ -3,6 +3,9 @@
 #include "editor.h"
 #include "shape.h"
 
+static const UINT toolIds[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE, IDM_LINEOO, IDM_CUBE };
+static const int toolsCount = sizeof(toolIds) / sizeof(toolIds[0]);
+
 static void GetMousePos(HWND hWnd, long& x, long& y)
 {
     POINT pt;
@@ -52,40 +55,28 @@ void Editor::OnCreate(HWND hWnd)
 {
     HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
 
-    TBBUTTON tbb[4]; // масив для кнопок
+    TBBUTTON tbb[toolsCount];
     ZeroMemory(tbb, sizeof(tbb));
 
-    tbb[0].iBitmap = 0;
-    tbb[0].idCommand = IDM_POINT;
-    tbb[0].fsState = TBSTATE_ENABLED;
-    tbb[0].fsStyle = TBSTYLE_BUTTON;
-
-    tbb[1].iBitmap = 1;
-    tbb[1].idCommand = IDM_LINE;
-    tbb[1].fsState = TBSTATE_ENABLED;
-    tbb[1].fsStyle = TBSTYLE_BUTTON;
-
-    tbb[2].iBitmap = 2;
-    tbb[2].idCommand = IDM_RECT;
-    tbb[2].fsState = TBSTATE_ENABLED;
-    tbb[2].fsStyle = TBSTYLE_BUTTON;
-
-    tbb[3].iBitmap = 3;
-    tbb[3].idCommand = IDM_ELLIPSE;
-    tbb[3].fsState = TBSTATE_ENABLED;
-    tbb[3].fsStyle = TBSTYLE_BUTTON;
+    for (int i = 0; i < toolsCount; i++)
+    {
+        tbb[i].iBitmap = i;
+        tbb[i].idCommand = toolIds[i];
+        tbb[i].fsState = TBSTATE_ENABLED;
+        tbb[i].fsStyle = TBSTYLE_BUTTON;
+    }
 
     hWndToolbar = CreateToolbarEx(
         hWnd,
         WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPSIBLINGS | CCS_TOP | TBSTYLE_TOOLTIPS,
         IDC_SHAPE_TOOLBAR,
-        4, // кількість кнопок у картинці
+        toolsCount,
         hInstance,
         IDB_TOOLBAR,
         tbb,
-        4, // кількість кнопок у тулбарі
-        24, 24, // висота кнопки
-        24, 24, // висота картинки
+        toolsCount,
+        24, 24,
+        24, 24,
         sizeof(TBBUTTON)
     );
 }
@@ -95,13 +86,13 @@ void Editor::OnSize(HWND hWnd)
     if (hWndToolbar)
     {
         RECT rc, rw;
-        GetClientRect(hWnd, &rc); //нові розміри головного вікна
-        GetWindowRect(hWndToolbar, &rw); //потрібно знати висоту Toolbar
+        GetClientRect(hWnd, &rc);
+        GetWindowRect(hWndToolbar, &rw);
 
         MoveWindow(
             hWndToolbar,
             0, 0,
-            rc.right - rc.left, //ширина Toolbar як у головного вікна
+            rc.right - rc.left,
             rw.bottom - rw.top, 
             FALSE);
     }
@@ -121,6 +112,8 @@ void Editor::OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam)
         case IDM_LINE:    lstrcpyW(lpttt->szText, L"Line");      break;
         case IDM_RECT:    lstrcpyW(lpttt->szText, L"Rectangle"); break;
         case IDM_ELLIPSE: lstrcpyW(lpttt->szText, L"Ellipse");   break;
+        case IDM_LINEOO:  lstrcpyW(lpttt->szText, L"LineOO");    break;
+        case IDM_CUBE:    lstrcpyW(lpttt->szText, L"Cube");      break;
         default:          lstrcpyW(lpttt->szText, L"Tool");      break;
         }
     }
@@ -130,7 +123,7 @@ void Editor::SetToolState(UINT activeId)
 {
     if (!hWndToolbar) return;
 
-    UINT ids[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE };
+    UINT ids[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE, IDM_LINEOO, IDM_CUBE };
     for (UINT id : ids)
     {
         SendMessage(hWndToolbar, TB_PRESSBUTTON, id, (id == activeId) ? TRUE : FALSE);
@@ -215,7 +208,7 @@ void Editor::OnInitMenuPopup(HWND hWnd, WPARAM wParam)
 
     if ((HMENU)wParam == hSubMenu)
     {
-        UINT ids[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE };
+        UINT ids[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE, IDM_LINEOO, IDM_CUBE };
         for (UINT id : ids)
             CheckMenuItem(hSubMenu, id, (id == currentId) ? MF_CHECKED : MF_UNCHECKED);
     }

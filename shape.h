@@ -3,8 +3,8 @@
 class Shape
 {
 protected:
-	long xstart = 0, ystart = 0;
-	long xend = 0, yend = 0;
+	long x1 = 0, y1 = 0;
+	long x2 = 0, y2 = 0;
 	bool rubber = false;
 
 	HPEN CreateShapePen() const;
@@ -18,26 +18,45 @@ public:
 	virtual Shape* Clone() const = 0;
 };
 
-class Point : public Shape {
+class Point : virtual public Shape
+{
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Point(*this); }
 };
 
-class Line : public Shape {
+class Line : virtual public Shape
+{
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Line(*this); }
 };
 
-class Rect : public Shape {
+class Rect : virtual public Shape
+{
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Rect(*this); }
 };
 
-class Elips : public Shape {
+class Elips : virtual public Shape
+{
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Elips(*this); }
+};
+
+class LineOO : public Line, public Elips 
+{
+public:
+	void Show(HDC) override;
+	Shape* Clone() const override { return new LineOO(*this); }
+};
+
+
+class Cube : public Line, public Rect
+{
+public:
+	void Show(HDC) override;
+	Shape* Clone() const override { return new Cube(*this); }
 };

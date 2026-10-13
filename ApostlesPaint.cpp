@@ -169,6 +169,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case IDM_ELLIPSE:
             editor.Start(new Elips, IDM_ELLIPSE);
             break;
+        case IDM_LINEOO:
+            editor.Start(new LineOO, IDM_LINEOO);
+            break;
+        case IDM_CUBE:
+            editor.Start(new Cube, IDM_CUBE);
+            break;
         case IDM_ABOUT:
             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
             break;
