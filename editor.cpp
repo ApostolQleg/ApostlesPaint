@@ -4,6 +4,7 @@
 
 #include "shape.h"
 #include "table.h"
+#include "file_dialog.h"
 
 static const UINT toolIds[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE, IDM_LINEOO, IDM_CUBE };
 static const int toolsCount = sizeof(toolIds) / sizeof(toolIds[0]);
@@ -278,10 +279,14 @@ void Editor::OnPaint(HWND hWnd)
 	EndPaint(hWnd, &ps);
 }
 
-void Editor::Save() {
+void Editor::Save(HWND hWnd) {
+	std::wstring path = FileDialog::ShowSaveDialog(hWnd);
+	if (path.empty()) return;
+
 	FILE* fout;
-	fopen_s(&fout, "file.apostol", "wt");
+	_wfopen_s(&fout, path.c_str(), L"wt");
 	if (!fout) return;
+
 	Editor* editor = Editor::getInstance();
 	int count = editor->GetShapesCount();
 
@@ -299,8 +304,11 @@ void Editor::Save() {
 }
 
 void Editor::Open(HWND hWnd) {
+	std::wstring path = FileDialog::ShowOpenDialog(hWnd);
+	if (path.empty()) return;
+
 	FILE* fin;
-	fopen_s(&fin, "file.apostol", "rt");
+	_wfopen_s(&fin, path.c_str(), L"rt");
 	if (!fin) return;
 
 	for (int i = 0; i < shapesCount; i++)

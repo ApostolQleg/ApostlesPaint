@@ -56,6 +56,6 @@ public:
     void OnPaint(HWND);
     void OnInitMenuPopup(HWND, WPARAM);
 
-    void Save();
+    void Save(HWND hWnd);
     void Open(HWND hWnd);
 };

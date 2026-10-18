@@ -181,7 +181,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
             break;
         case IDM_SAVE:
-            Editor::getInstance()->Save();
+            Editor::getInstance()->Save(hWnd);
             break;
         case IDM_OPEN:
             Editor::getInstance()->Open(hWnd);

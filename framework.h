@@ -10,11 +10,13 @@
 #include <memory.h>
 #include <tchar.h>
 
+// my includes
 #include <commctrl.h>
 #pragma comment(lib, "comctl32.lib")
-
-// my includes
 #include <cstdio>
+#include <shobjidl.h>
+#include <string>
+#pragma comment(lib, "Ole32.lib")
 
 #define MAX_LOADSTRING 100
 #define INIT_SHAPES_COUNT 16
