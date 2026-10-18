@@ -152,6 +152,19 @@ void Editor::Start(Shape* p, UINT cmdId)
 	SetToolState(cmdId);
 }
 
+void Editor::Clear(HWND hWnd) {
+	for (int i = 0; i < shapesCount; i++)
+		delete pshape[i];
+
+	delete[] pshape;
+	pshape = nullptr;
+	shapesCount = shapesCapacity = 0;
+
+	Table::getInstance()->Clear();
+	
+	InvalidateRect(hWnd, NULL, TRUE);
+}
+
 void Editor::OnLBdown(HWND hWnd)
 {
 	if (!pcurrent) return;

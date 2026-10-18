@@ -44,6 +44,7 @@ public:
     void SetToolState(UINT activeId);
 
     void Start(Shape* p, UINT cmdId);
+    void Clear(HWND hWnd);
 
     void OnLBdown(HWND);
     void OnLBup(HWND);
