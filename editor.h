@@ -23,6 +23,8 @@ private:
     bool isDrawing = false;
     bool rubberDrawn = false;
 
+    bool isHighlighted = false;
+
     long xstart = 0, ystart = 0;
 
     HWND hWndToolbar = nullptr;
@@ -44,7 +46,9 @@ public:
     void SetToolState(UINT activeId);
 
     void Start(Shape* p, UINT cmdId);
+    void Highlight(UINT index);
     void Clear(HWND hWnd);
+    void Delete(UINT index);
 
     void OnLBdown(HWND);
     void OnLBup(HWND);

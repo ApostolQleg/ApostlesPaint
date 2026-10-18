@@ -12,24 +12,30 @@ HPEN Shape::CreateShapePen() const
 {
 	if (rubber)
 		return CreatePen(PS_DOT, 1, RGB(0, 0, 0));
+	else if (highlight)
+		return CreatePen(PS_SOLID, SHAPE_THICKNESS, RGB(255, 0, 0));
 	return CreatePen(PS_SOLID, SHAPE_THICKNESS, RGB(0, 0, 0));
 }
 
 void Point::Show(HDC hdc) {
-	long radius = SHAPE_THICKNESS / 2;
+	long radius = SHAPE_THICKNESS;
 
-	long left   = x1 - radius;
-	long top    = y1 - radius;
-	long right  = x1 + radius + 1;
+	long left = x1 - radius;
+	long top = y1 - radius;
+	long right = x1 + radius + 1;
 	long bottom = y1 + radius + 1;
 
+	COLORREF color = highlight ? RGB(255, 0, 0) : RGB(0, 0, 0);
+	HBRUSH hBrush = CreateSolidBrush(color);
+
 	HPEN hOldPen = (HPEN)SelectObject(hdc, GetStockObject(NULL_PEN));
-	HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
 
 	Rectangle(hdc, left, top, right, bottom);
 
 	SelectObject(hdc, hOldBrush);
 	SelectObject(hdc, hOldPen);
+	DeleteObject(hBrush);
 }
 
 void Line::Show(HDC hdc) {

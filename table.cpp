@@ -2,6 +2,7 @@
 #include "framework.h"
 #include "table.h"
 
+#include "shape.h"
 #include "editor.h"
 
 HWND hWndDlg = NULL;
@@ -65,6 +66,9 @@ void Table::Close()
 
 INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    HWND hList = GetDlgItem(hDlg, IDC_SHAPES_LIST);
+    int index = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
+
     switch (message)
     {
     case WM_INITDIALOG:
@@ -82,7 +86,12 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK)
         {
-            // щось робимо
+            if (index != LB_ERR)
+            {
+                SendMessage(hList, LB_DELETESTRING, index, 0);
+                Editor::getInstance()->Delete(index);
+                InvalidateRect(GetParent(hDlg), NULL, TRUE);
+            }
             return (INT_PTR)TRUE;
         }
         if (LOWORD(wParam) == IDCANCEL)
@@ -90,9 +99,16 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             DestroyWindow(hDlg);
             return (INT_PTR)TRUE;
         }
+        if (LOWORD(wParam) == IDC_SHAPES_LIST && HIWORD(wParam) == LBN_SELCHANGE)
+        {
+            Editor::getInstance()->Highlight(index);
+            InvalidateRect(GetParent(hDlg), NULL, TRUE);
+        }
         break;
 
     case WM_DESTROY:
+        Editor::getInstance()->Highlight(-1);
+        InvalidateRect(GetParent(hDlg), NULL, TRUE);
         hWndDlg = NULL;
         return (INT_PTR)TRUE;
     }

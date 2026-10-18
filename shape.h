@@ -6,6 +6,7 @@ protected:
 	long x1 = 0, y1 = 0;
 	long x2 = 0, y2 = 0;
 	bool rubber = false;
+	bool highlight = false;
 
 	HPEN CreateShapePen() const;
 public:
@@ -13,8 +14,9 @@ public:
 
 	void Set(long x1, long y1, long x2, long y2);
 	void SetRubber(bool r) { rubber = r; }
+	void SetHighlight(bool h) { highlight = h; }
 
-	virtual void Show(HDC) = 0;
+	virtual void Show(HDC hdc) = 0;
 	virtual Shape* Clone() const = 0;
 	virtual const WCHAR* GetName() const = 0;
 	virtual void GetInfo(WCHAR* buf, size_t size) const {

@@ -152,6 +152,15 @@ void Editor::Start(Shape* p, UINT cmdId)
 	SetToolState(cmdId);
 }
 
+void Editor::Highlight(UINT index) {
+	for (int i = 0; i < shapesCount; i++)
+		pshape[i]->SetHighlight(false);
+
+	if (index < (UINT)shapesCount) {
+		pshape[index]->SetHighlight(true);
+	}
+};
+
 void Editor::Clear(HWND hWnd) {
 	for (int i = 0; i < shapesCount; i++)
 		delete pshape[i];
@@ -161,8 +170,22 @@ void Editor::Clear(HWND hWnd) {
 	shapesCount = shapesCapacity = 0;
 
 	Table::getInstance()->Clear();
-	
+
 	InvalidateRect(hWnd, NULL, TRUE);
+}
+
+void Editor::Delete(UINT index) {
+	if (index < (UINT)shapesCount) {
+		delete pshape[index];
+
+		int lastIndex = shapesCount - 1;
+		for (int i = index; i < lastIndex; i++) {
+			pshape[i] = pshape[i + 1];
+		}
+
+		pshape[lastIndex] = nullptr;
+		shapesCount--;
+	};
 }
 
 void Editor::OnLBdown(HWND hWnd)
