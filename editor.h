@@ -6,6 +6,14 @@
 class Editor
 {
 private:
+    static Editor* p_instance;
+
+    Editor() {};
+    ~Editor();
+
+    Editor(const Editor&) = delete;
+    Editor& operator=(const Editor&) = delete;
+
     Shape** pshape = nullptr;
     int shapesCount = 0;
     int shapesCapacity = 0;
@@ -21,8 +29,7 @@ private:
 
     void AddShape(Shape* p);
 public:
-    Editor() {};
-    ~Editor();
+    static Editor* getInstance();
 
     void OnCreate(HWND hWnd);
     void OnSize(HWND hWnd);

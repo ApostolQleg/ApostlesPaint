@@ -6,8 +6,9 @@
 #include "ApostlesPaint.h"
 
 #include "editor.h"
+#include "table.h"
 
-Editor editor;
+Table table;
 
 // Global Variables:
 HINSTANCE hInst;                     // current instance
@@ -128,28 +129,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
-        editor.OnCreate(hWnd);
+        Editor::getInstance()->OnCreate(hWnd);
         break;
     case WM_SIZE:
-        editor.OnSize(hWnd);
+        Editor::getInstance()->OnSize(hWnd);
         break;
     case WM_NOTIFY:
-        editor.OnNotify(hWnd, wParam, lParam);
+        Editor::getInstance()->OnNotify(hWnd, wParam, lParam);
         break;
     case WM_LBUTTONDOWN:
-        editor.OnLBdown(hWnd);
+        Editor::getInstance()->OnLBdown(hWnd);
         break;
     case WM_LBUTTONUP:
-        editor.OnLBup(hWnd);
+        Editor::getInstance()->OnLBup(hWnd);
         break;
     case WM_MOUSEMOVE:
-        editor.OnMouseMove(hWnd);
+        Editor::getInstance()->OnMouseMove(hWnd);
         break;
     case WM_PAINT:
-        editor.OnPaint(hWnd);
+        Editor::getInstance()->OnPaint(hWnd);
         break;
     case WM_INITMENUPOPUP:
-        editor.OnInitMenuPopup(hWnd, wParam);
+        Editor::getInstance()->OnInitMenuPopup(hWnd, wParam);
         break;
     case WM_COMMAND:
     {
@@ -158,22 +159,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         switch (wmId)
         {
         case IDM_POINT:
-            editor.Start(new Point, IDM_POINT);
+            Editor::getInstance()->Start(new Point, IDM_POINT);
             break;
         case IDM_LINE:
-            editor.Start(new Line, IDM_LINE);
+            Editor::getInstance()->Start(new Line, IDM_LINE);
             break;
         case IDM_RECT:
-            editor.Start(new Rect, IDM_RECT);
+            Editor::getInstance()->Start(new Rect, IDM_RECT);
             break;
         case IDM_ELLIPSE:
-            editor.Start(new Elips, IDM_ELLIPSE);
+            Editor::getInstance()->Start(new Elips, IDM_ELLIPSE);
             break;
         case IDM_LINEOO:
-            editor.Start(new LineOO, IDM_LINEOO);
+            Editor::getInstance()->Start(new LineOO, IDM_LINEOO);
             break;
         case IDM_CUBE:
-            editor.Start(new Cube, IDM_CUBE);
+            Editor::getInstance()->Start(new Cube, IDM_CUBE);
+            break;
+        case IDM_TABLE:
+            table.Show(hWnd);
             break;
         case IDM_ABOUT:
             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
@@ -187,6 +191,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     break;
     case WM_DESTROY:
+        table.Close();
         PostQuitMessage(0);
         break;
     default:

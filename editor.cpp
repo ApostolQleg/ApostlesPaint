@@ -2,6 +2,9 @@
 #include "framework.h"
 #include "editor.h"
 #include "shape.h"
+#include "table.h"
+
+extern Table table;
 
 static const UINT toolIds[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE, IDM_LINEOO, IDM_CUBE };
 static const int toolsCount = sizeof(toolIds) / sizeof(toolIds[0]);
@@ -15,6 +18,16 @@ static void GetMousePos(HWND hWnd, long& x, long& y)
     y = pt.y;
 }
 
+Editor* Editor::p_instance = nullptr;
+
+Editor* Editor::getInstance()
+{
+    if (!p_instance)
+    {
+        p_instance = new Editor();
+    }
+    return p_instance;
+}
 
 Editor::~Editor()
 {
@@ -192,6 +205,11 @@ void Editor::OnLBup(HWND hWnd)
     GetMousePos(hWnd, x, y);
     pcurrent->Set(xstart, ystart, x, y);
     pcurrent->SetRubber(false);
+
+    WCHAR buf[BUFFER_SIZE];
+    swprintf_s(buf, BUFFER_SIZE, L"%ls\t%ld\t%ld\t%ld\t%ld", pcurrent->Get(), xstart, ystart, x, y);
+
+    table.Add(buf);
 
     Shape* next = pcurrent->Clone();
     AddShape(pcurrent);
