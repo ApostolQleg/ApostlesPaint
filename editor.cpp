@@ -1,10 +1,9 @@
 #include "pch.h"
 #include "framework.h"
 #include "editor.h"
+
 #include "shape.h"
 #include "table.h"
-
-extern Table table;
 
 static const UINT toolIds[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE, IDM_LINEOO, IDM_CUBE };
 static const int toolsCount = sizeof(toolIds) / sizeof(toolIds[0]);
@@ -207,9 +206,9 @@ void Editor::OnLBup(HWND hWnd)
     pcurrent->SetRubber(false);
 
     WCHAR buf[BUFFER_SIZE];
-    swprintf_s(buf, BUFFER_SIZE, L"%ls\t%ld\t%ld\t%ld\t%ld", pcurrent->Get(), xstart, ystart, x, y);
+    pcurrent->GetInfo(buf, BUFFER_SIZE);
 
-    table.Add(buf);
+    Table::getInstance()->Add(buf);
 
     Shape* next = pcurrent->Clone();
     AddShape(pcurrent);

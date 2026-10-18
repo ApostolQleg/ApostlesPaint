@@ -16,7 +16,10 @@ public:
 
 	virtual void Show(HDC) = 0;
 	virtual Shape* Clone() const = 0;
-	virtual const WCHAR* Get() const = 0;
+	virtual const WCHAR* GetName() const = 0;
+	virtual void GetInfo(WCHAR* buf, size_t size) const {
+		swprintf_s(buf, size, L"%s\t%ld\t%ld\t%ld\t%ld", GetName(), x1, y1, x2, y2);
+	}
 };
 
 class Point : virtual public Shape
@@ -24,7 +27,7 @@ class Point : virtual public Shape
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Point(*this); }
-	const WCHAR* Get() const override { return L"Point"; }
+	const WCHAR* GetName() const override { return L"Point\t"; }
 };
 
 class Line : virtual public Shape
@@ -32,7 +35,7 @@ class Line : virtual public Shape
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Line(*this); }
-	const WCHAR* Get() const override { return L"Line\t"; }
+	const WCHAR* GetName() const override { return L"Line\t"; }
 };
 
 class Rect : virtual public Shape
@@ -40,7 +43,7 @@ class Rect : virtual public Shape
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Rect(*this); }
-	const WCHAR* Get() const override { return L"Rectangle"; }
+	const WCHAR* GetName() const override { return L"Rectangle"; }
 };
 
 class Elips : virtual public Shape
@@ -48,7 +51,7 @@ class Elips : virtual public Shape
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Elips(*this); }
-	const WCHAR* Get() const override { return L"Ellipse"; }
+	const WCHAR* GetName() const override { return L"Ellipse\t"; }
 };
 
 class LineOO : public Line, public Elips 
@@ -56,7 +59,7 @@ class LineOO : public Line, public Elips
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new LineOO(*this); }
-	const WCHAR* Get() const override { return L"LineOO"; }
+	const WCHAR* GetName() const override { return L"LineOO\t"; }
 };
 
 
@@ -65,5 +68,5 @@ class Cube : public Line, public Rect
 public:
 	void Show(HDC) override;
 	Shape* Clone() const override { return new Cube(*this); }
-	const WCHAR* Get() const override { return L"Cube\t"; }
+	const WCHAR* GetName() const override { return L"Cube\t"; }
 };

@@ -31,6 +31,13 @@ private:
 public:
     static Editor* getInstance();
 
+    int GetShapesCount() const { return shapesCount; }
+    Shape* GetShape(int index) const {
+        if (index >= 0 && index < shapesCount)
+            return pshape[index];
+        return nullptr;
+    }
+
     void OnCreate(HWND hWnd);
     void OnSize(HWND hWnd);
     void OnNotify(HWND hWnd, WPARAM wParam, LPARAM lParam);

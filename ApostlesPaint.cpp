@@ -8,8 +8,6 @@
 #include "editor.h"
 #include "table.h"
 
-Table table;
-
 // Global Variables:
 HINSTANCE hInst;                     // current instance
 WCHAR szTitle[MAX_LOADSTRING];       // The title bar text
@@ -177,10 +175,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Editor::getInstance()->Start(new Cube, IDM_CUBE);
             break;
         case IDM_TABLE:
-            table.Show(hWnd);
+            Table::getInstance()->Show(hWnd);
             break;
         case IDM_ABOUT:
             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+            break;
+        case IDM_SAVE:
+            //save file
+            break;
+        case IDM_OPEN:
+            //open file
             break;
         case IDM_EXIT:
             DestroyWindow(hWnd);
@@ -191,7 +195,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     break;
     case WM_DESTROY:
-        table.Close();
+        Table::getInstance()->Close();
         PostQuitMessage(0);
         break;
     default:
