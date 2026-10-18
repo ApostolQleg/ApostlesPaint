@@ -45,6 +45,14 @@ void Table::Add(const WCHAR *payload)
     }
 }
 
+void Table::Clear()
+{
+    if (hWndDlg)
+    {
+        SendDlgItemMessage(hWndDlg, IDC_SHAPES_LIST, LB_RESETCONTENT, 0, 0);
+    }
+}
+
 void Table::Close()
 {
     if (hWndDlg)

@@ -18,5 +18,6 @@ public:
 
 	void Add(const WCHAR* payload);
 	void Show(HWND hWnd);
+	void Clear();
 	void Close();
 };

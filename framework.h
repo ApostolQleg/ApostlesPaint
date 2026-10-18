@@ -13,6 +13,9 @@
 #include <commctrl.h>
 #pragma comment(lib, "comctl32.lib")
 
+// my includes
+#include <cstdio>
+
 #define MAX_LOADSTRING 100
 #define INIT_SHAPES_COUNT 16
 

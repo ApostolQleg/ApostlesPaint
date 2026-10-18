@@ -50,4 +50,7 @@ public:
     void OnMouseMove(HWND);
     void OnPaint(HWND);
     void OnInitMenuPopup(HWND, WPARAM);
+
+    void Save();
+    void Open(HWND hWnd);
 };
