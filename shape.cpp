@@ -31,7 +31,7 @@ void Point::Show(HDC hdc) {
 	HPEN hOldPen = (HPEN)SelectObject(hdc, GetStockObject(NULL_PEN));
 	HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
 
-	Rectangle(hdc, left, top, right, bottom);
+	Ellipse(hdc, left, top, right, bottom);
 
 	SelectObject(hdc, hOldBrush);
 	SelectObject(hdc, hOldPen);
