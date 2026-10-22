@@ -2,9 +2,6 @@
 #include "framework.h"
 #include "table.h"
 
-#include "shape.h"
-#include "editor.h"
-
 HWND hWndDlg = NULL;
 INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 void PopulateTable(HWND hDlg);
@@ -72,7 +69,9 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_INITDIALOG:
-        PopulateTable(hDlg);
+        hWndDlg = hDlg;
+        SendMessage(hList, LB_RESETCONTENT, 0, 0);
+        Table::getInstance()->NotifyOpened();
         return (INT_PTR)TRUE;
 
     case WM_SYSCOMMAND:
@@ -89,7 +88,7 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             if (index != LB_ERR)
             {
                 SendMessage(hList, LB_DELETESTRING, index, 0);
-                Editor::getInstance()->Delete(index);
+                Table::getInstance()->NotifyDelete(index);
                 InvalidateRect(GetParent(hDlg), NULL, TRUE);
             }
             return (INT_PTR)TRUE;
@@ -101,40 +100,17 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         }
         if (LOWORD(wParam) == IDC_SHAPES_LIST && HIWORD(wParam) == LBN_SELCHANGE)
         {
-            Editor::getInstance()->Highlight(index);
+            Table::getInstance()->NotifySelect(index);
             InvalidateRect(GetParent(hDlg), NULL, TRUE);
         }
         break;
 
     case WM_DESTROY:
-        Editor::getInstance()->Highlight(-1);
+        Table::getInstance()->NotifyClosed();
         InvalidateRect(GetParent(hDlg), NULL, TRUE);
         hWndDlg = NULL;
         return (INT_PTR)TRUE;
     }
 
     return (INT_PTR)FALSE;
-}
-
-void PopulateTable(HWND hDlg)
-{
-    HWND hList = GetDlgItem(hDlg, IDC_SHAPES_LIST);
-    if (!hList)
-        return;
-
-    SendMessage(hList, LB_RESETCONTENT, 0, 0);
-
-    Editor *editor = Editor::getInstance();
-    int count = editor->GetShapesCount();
-
-    for (int i = 0; i < count; i++)
-    {
-        Shape *shape = editor->GetShape(i);
-        if (shape)
-        {
-            WCHAR buf[BUFFER_SIZE];
-            shape->GetInfo(buf, BUFFER_SIZE);
-            SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)buf);
-        }
-    }
 }

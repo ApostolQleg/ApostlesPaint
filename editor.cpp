@@ -3,7 +3,6 @@
 #include "editor.h"
 
 #include "shape.h"
-#include "table.h"
 #include "file_dialog.h"
 
 static const UINT toolIds[] = { IDM_POINT, IDM_LINE, IDM_RECT, IDM_ELLIPSE, IDM_LINEOO, IDM_CUBE };
@@ -170,7 +169,7 @@ void Editor::Clear(HWND hWnd) {
 	pshape = nullptr;
 	shapesCount = shapesCapacity = 0;
 
-	Table::getInstance()->Clear();
+	if (listener) listener->OnShapesCleared();
 
 	InvalidateRect(hWnd, NULL, TRUE);
 }
@@ -245,7 +244,7 @@ void Editor::OnLBup(HWND hWnd)
 	WCHAR buf[BUFFER_SIZE];
 	pcurrent->GetInfo(buf, BUFFER_SIZE);
 
-	Table::getInstance()->Add(buf);
+	if (listener) listener->OnShapeAdded(buf);
 
 	Shape* next = pcurrent->Clone();
 	AddShape(pcurrent);
@@ -317,7 +316,7 @@ void Editor::Open(HWND hWnd) {
 	}
 	shapesCount = 0;
 
-	Table::getInstance()->Clear();
+	if (listener) listener->OnShapesCleared();
 
 	WCHAR type[BUFFER_SIZE] = { 0 };
 	long x1 = 0, y1 = 0, x2 = 0, y2 = 0;
@@ -339,7 +338,7 @@ void Editor::Open(HWND hWnd) {
 
 			WCHAR buf[BUFFER_SIZE];
 			pshape->GetInfo(buf, BUFFER_SIZE);
-			Table::getInstance()->Add(buf);
+			if (listener) listener->OnShapeAdded(buf);
 		}
 	}
 	fclose(fin);

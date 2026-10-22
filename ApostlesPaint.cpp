@@ -19,6 +19,29 @@ BOOL InitInstance(HINSTANCE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK About(HWND, UINT, WPARAM, LPARAM);
 
+class Listener : public TableListener, public EditorListener
+{
+public:
+    void OnTableOpened() override
+    {
+        Editor* editor = Editor::getInstance();
+        for (int i = 0; i < editor->GetShapesCount(); i++)
+        {
+            WCHAR buf[BUFFER_SIZE];
+            editor->GetShape(i)->GetInfo(buf, BUFFER_SIZE);
+            Table::getInstance()->Add(buf);
+        }
+    }
+    void OnTableSelect(int index) override { Editor::getInstance()->Highlight(index); }
+    void OnTableDelete(int index) override { Editor::getInstance()->Delete(index); }
+    void OnTableClosed() override { Editor::getInstance()->Highlight(-1); }
+
+    void OnShapeAdded(const WCHAR* info) override { Table::getInstance()->Add(info); }
+    void OnShapesCleared() override { Table::getInstance()->Clear(); }
+};
+
+static Listener listener;
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                       _In_opt_ HINSTANCE hPrevInstance,
                       _In_ LPWSTR lpCmdLine,
@@ -127,6 +150,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
+        Table::getInstance()->SetListener(&listener);
+        Editor::getInstance()->SetListener(&listener);
         Editor::getInstance()->OnCreate(hWnd);
         break;
     case WM_SIZE:

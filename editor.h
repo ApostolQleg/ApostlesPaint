@@ -3,6 +3,15 @@
 #include "Resource.h"
 #include "shape.h"
 
+class EditorListener
+{
+public:
+    virtual ~EditorListener() {}
+
+    virtual void OnShapeAdded(const WCHAR* info) = 0;
+    virtual void OnShapesCleared() = 0;
+};
+
 class Editor
 {
 private:
@@ -29,9 +38,13 @@ private:
 
     HWND hWndToolbar = nullptr;
 
+    EditorListener* listener = nullptr;
+
     void AddShape(Shape* p);
 public:
     static Editor* getInstance();
+
+    void SetListener(EditorListener* l) { listener = l; }
 
     int GetShapesCount() const { return shapesCount; }
     Shape* GetShape(int index) const {
